@@ -33,9 +33,10 @@ echo "  COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
 
 
 set -e # exit on first error
-cd ~/MaCh3
-rm -rf ~/MaCh3/build
-mkdir -p ~/MaCh3/build
+TARGET_DIR="${1:-$HOME/MaCh3}"
+cd "${TARGET_DIR}"
+rm -rf "${TARGET_DIR}/build"
+mkdir -p "${TARGET_DIR}/build"
 
 # YAML will not build unless we source the latter ?!
 # source /opt/intel/oneapi/setvars.sh --force
@@ -61,12 +62,12 @@ set -x
     -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise" \
     --no-warn-unused-cli \
-    -S~/MaCh3 \
-    -B~/MaCh3/build \
+    -S"${TARGET_DIR}/MaCh3" \
+    -B"${TARGET_DIR}/build" \
     -G "Unix Makefiles"
 
 # Run from within the build dir as spdlog has some relative path somewhere!
-cd ~/MaCh3/build
+cd "${TARGET_DIR}/build"
 
 make VERBOSE=1 -j18
 make install
