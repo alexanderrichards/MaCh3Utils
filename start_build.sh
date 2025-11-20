@@ -59,9 +59,9 @@ set -x
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
-    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
-    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=fast" \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=fast" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=fast" \
     --no-warn-unused-cli \
     -S"${TARGET_DIR}" \
     -B"${TARGET_DIR}/build" \
