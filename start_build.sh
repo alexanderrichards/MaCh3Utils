@@ -4,6 +4,7 @@ FPGA_DEVICE=Agilex7
 COMPILE_EMULATOR=FALSE
 COMPILE_REPORT=FALSE
 COMPILE_HARDWARE=FALSE
+
 export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
 export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
 
@@ -33,7 +34,7 @@ echo "  COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
 
 
 set -e # exit on first error
-TARGET_DIR="${1:-$HOME/MaCh3}"
+TARGET_DIR="${2:-$HOME/MaCh3}"
 cd "${TARGET_DIR}"
 rm -rf "${TARGET_DIR}/build"
 mkdir -p "${TARGET_DIR}/build"
@@ -62,7 +63,7 @@ set -x
     -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise" \
     --no-warn-unused-cli \
-    -S"${TARGET_DIR}/MaCh3" \
+    -S"${TARGET_DIR}" \
     -B"${TARGET_DIR}/build" \
     -G "Unix Makefiles"
 
