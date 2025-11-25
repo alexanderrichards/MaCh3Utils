@@ -4,6 +4,8 @@ FPGA_DEVICE=Agilex7
 COMPILE_EMULATOR=FALSE
 COMPILE_REPORT=FALSE
 COMPILE_HARDWARE=FALSE
+USE_CPU=FALSE
+USE_FPGA=TRUE
 
 export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
 export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
@@ -20,8 +22,12 @@ case $1 in
         FPGA_DEVICE=/opt/oneapi-asp/ia840f/:ofs_ia840f_usm
         COMPILE_HARDWARE=TRUE
         ;;
+    cpu)
+        USE_CPU=TRUE
+        USE_FPGA=FALSE
+        ;;
     *)
-        echo "Missing/unknown parameter, choose from [emulator/report/hardware]"
+        echo "Missing/unknown parameter, choose from [cpu/emulator/report/hardware]"
         exit 1
         ;;
 esac
@@ -53,8 +59,8 @@ set -x
     -DCMAKE_AR:FILEPATH=/usr/bin/gcc-ar \
     -DCMAKE_CC_COMPILER:FILEPATH=/opt/intel/oneapi/compiler/2025.0/bin/icx \
     -DCMAKE_CXX_COMPILER:FILEPATH=/opt/intel/oneapi/compiler/2025.0/bin/icpx \
-    -DUSE_CPU:BOOL=FALSE \
-    -DUSE_FPGA:BOOL=TRUE \
+    -DUSE_CPU:BOOL=${USE_CPU} \
+    -DUSE_FPGA:BOOL=${USE_FPGA} \
     -DFPGA_DEVICE=${FPGA_DEVICE} \
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
