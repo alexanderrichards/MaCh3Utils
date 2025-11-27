@@ -32,18 +32,28 @@ case $1 in
         ;;
 esac
 
+# Argument 2: Target Source Directory (Default: $HOME/MaCh3)
+TARGET_DIR="${2:-$HOME/MaCh3}"
+
+# Argument 3: Build Directory Name (Default: "build")
+BUILD_DIR_NAME="${3:-build}"
+FULL_BUILD_PATH="${TARGET_DIR}/${BUILD_DIR_NAME}"
+
 echo "Build Flags:"
 echo "  FPGA_DEVICE: ${FPGA_DEVICE}"
 echo "  COMPILE_EMULATOR: ${COMPILE_EMULATOR}"
 echo "  COMPILE_REPORT: ${COMPILE_REPORT}"
 echo "  COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
-
+echo "  TARGET_DIR: ${TARGET_DIR}"
+echo "  BUILD_DIR: ${FULL_BUILD_PATH}"
 
 set -e # exit on first error
-TARGET_DIR="${2:-$HOME/MaCh3}"
+
 cd "${TARGET_DIR}"
-rm -rf "${TARGET_DIR}/build"
-mkdir -p "${TARGET_DIR}/build"
+
+# Clean and recreate the specific build directory
+rm -rf "${FULL_BUILD_PATH}"
+mkdir -p "${FULL_BUILD_PATH}"
 
 # YAML will not build unless we source the latter ?!
 # source /opt/intel/oneapi/setvars.sh --force
@@ -70,11 +80,11 @@ set -x
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=fast" \
     --no-warn-unused-cli \
     -S"${TARGET_DIR}" \
-    -B"${TARGET_DIR}/build" \
+    -B"${FULL_BUILD_PATH}" \
     -G "Unix Makefiles"
 
 # Run from within the build dir as spdlog has some relative path somewhere!
-cd "${TARGET_DIR}/build"
+cd "${FULL_BUILD_PATH}"
 
 make VERBOSE=1 -j18
 make install
