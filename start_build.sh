@@ -52,8 +52,8 @@ set -e # exit on first error
 cd "${TARGET_DIR}"
 
 # Clean and recreate the specific build directory
-rm -rf "${FULL_BUILD_PATH}"
-mkdir -p "${FULL_BUILD_PATH}"
+#rm -rf "${FULL_BUILD_PATH}"
+#mkdir -p "${FULL_BUILD_PATH}"
 
 # YAML will not build unless we source the latter ?!
 # source /opt/intel/oneapi/setvars.sh --force
@@ -75,9 +75,9 @@ set -x
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
-    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise" \
-    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
     --no-warn-unused-cli \
     -S"${TARGET_DIR}" \
     -B"${FULL_BUILD_PATH}" \
