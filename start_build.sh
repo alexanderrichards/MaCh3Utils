@@ -38,6 +38,10 @@ case $1 in
         ;;
 esac
 
+# YAML will not build unless we source the latter ?!
+# source /opt/intel/oneapi/setvars.sh --force
+. /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
+
 # Argument 2: Target Source Directory (Default: $HOME/MaCh3)
 TARGET_DIR="${2:-$HOME/MaCh3}"
 
