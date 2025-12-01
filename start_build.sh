@@ -1,16 +1,23 @@
 #!/bin/bash
 
+USE_CPU=FALSE
+USE_FPGA=FALSE
 FPGA_DEVICE=Agilex7
 COMPILE_EMULATOR=FALSE
 COMPILE_REPORT=FALSE
 COMPILE_HARDWARE=FALSE
-USE_CPU=FALSE
-USE_FPGA=TRUE
 
-export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
-export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
+
 
 case $1 in
+    emulator | report | hardware)
+        export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
+        export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
+        USE_FPGA=TRUE
+        # YAML will not build unless we source the latter ?!
+        # source /opt/intel/oneapi/setvars.sh --force
+        . /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
+        ;;&
     emulator)
         COMPILE_EMULATOR=TRUE
         ;;
@@ -24,7 +31,6 @@ case $1 in
         ;;
     cpu)
         USE_CPU=TRUE
-        USE_FPGA=FALSE
         ;;
     *)
         echo "Missing/unknown parameter, choose from [cpu/emulator/report/hardware]"
@@ -39,25 +45,29 @@ TARGET_DIR="${2:-$HOME/MaCh3}"
 BUILD_DIR_NAME="${3:-build}"
 FULL_BUILD_PATH="${TARGET_DIR}/${BUILD_DIR_NAME}"
 
-echo "Build Flags:"
-echo "  FPGA_DEVICE: ${FPGA_DEVICE}"
-echo "  COMPILE_EMULATOR: ${COMPILE_EMULATOR}"
-echo "  COMPILE_REPORT: ${COMPILE_REPORT}"
-echo "  COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
-echo "  TARGET_DIR: ${TARGET_DIR}"
-echo "  BUILD_DIR: ${FULL_BUILD_PATH}"
+
+echo "********************************************"
+echo "* Build Flags:"
+echo "*     USE_CPU: ${USE_CPU}"
+echo "*     USE_FPGA: ${USE_FPGA}"
+echo "*     FPGA_DEVICE: ${FPGA_DEVICE}"
+echo "*     COMPILE_EMULATOR: ${COMPILE_EMULATOR}"
+echo "*     COMPILE_REPORT: ${COMPILE_REPORT}"
+echo "*     COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
+echo "*     TARGET_DIR: ${TARGET_DIR}"
+echo "*     BUILD_DIR_NAME: ${BUILD_DIR_NAME}"
+echo "*     FULL_BUILD_PATH: ${FULL_BUILD_PATH}"
+echo "********************************************"
+
+# Don't want to trun this on and break CI build but nice for interactive builds to allow user to check config before starting
+# read -n1 -s -r -p "Press ANY key to continue with build...";echo
 
 set -e # exit on first error
 
 cd "${TARGET_DIR}"
-
 # Clean and recreate the specific build directory
 rm -rf "${FULL_BUILD_PATH}"
 mkdir -p "${FULL_BUILD_PATH}"
-
-# YAML will not build unless we source the latter ?!
-# source /opt/intel/oneapi/setvars.sh --force
-. /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
 
 set -x
 
