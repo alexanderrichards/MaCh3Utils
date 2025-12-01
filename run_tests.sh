@@ -10,6 +10,9 @@ TUTORIAL_BUILD_DIR="${2:-./build}"
 . ${CORE_BUILD_DIR}/bin/setup.MaCh3.sh
 . ${TUTORIAL_BUILD_DIR}/bin/setup.MaCh3Tutorial.sh
 
+set -e # exit on first error
+set -x
+
 cd ${TUTORIAL_BUILD_DIR}
 
 # create the Test.root file
