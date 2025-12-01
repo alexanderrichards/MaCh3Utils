@@ -4,7 +4,7 @@ export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
 export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
 
 CORE_BUILD_DIR="${1:-./build}"
-TUTORIAL_BUILD_DIR="${2:./build}"
+TUTORIAL_BUILD_DIR="${2:-./build}"
 
 . /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
 . ${CORE_BUILD_DIR}/bin/setup.MaCh3.sh
