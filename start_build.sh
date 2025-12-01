@@ -66,8 +66,8 @@ set -e # exit on first error
 
 cd "${TARGET_DIR}"
 # Clean and recreate the specific build directory
-rm -rf "${FULL_BUILD_PATH}"
-mkdir -p "${FULL_BUILD_PATH}"
+rm -rf "${BUILD_DIR_NAME}"
+mkdir -p "${BUILD_DIR_NAME}"
 
 set -x
 
@@ -89,12 +89,12 @@ set -x
     -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=fast -fma -Xsrounding=faithful" \
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=fast -fma -Xsrounding=faithful" \
     --no-warn-unused-cli \
-    -S"${TARGET_DIR}" \
-    -B"${FULL_BUILD_PATH}" \
+    -S"." \
+    -B"${BUILD_DIR_NAME}" \
     -G "Unix Makefiles"
 
 # Run from within the build dir as spdlog has some relative path somewhere!
-cd "${FULL_BUILD_PATH}"
+cd "${BUILD_DIR_NAME}"
 
 make VERBOSE=1 -j18
 make install
