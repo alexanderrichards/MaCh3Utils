@@ -14,13 +14,11 @@ cd ${TUTORIAL_BUILD_DIR}
 
 # create the Test.root file
 #./bin/MCMCTutorial Inputs/ManagerTest.yaml
-#./bin/MCMCTutorial TutorialConfigs/FitterConfig.yaml
-MCMCTutorial TutorialConfigs/FitterConfig.yaml
+./bin/MCMCTutorial TutorialConfigs/FitterConfig.yaml
 
 # process it ?
 #./bin/ProcessMCMC ./bin/TutorialDiagConfig.yaml ./Test.root
-#./bin/ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
-ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
+./bin/ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
 
 # validate
 #./Apps/SplineValidations
