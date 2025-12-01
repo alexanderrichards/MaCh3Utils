@@ -6,7 +6,7 @@ FPGA_DEVICE=Agilex7
 COMPILE_EMULATOR=FALSE
 COMPILE_REPORT=FALSE
 COMPILE_HARDWARE=FALSE
-
+MaCh3_Branch=intel_icpx
 
 
 case $1 in
@@ -48,6 +48,7 @@ FULL_BUILD_PATH="${TARGET_DIR}/${BUILD_DIR_NAME}"
 
 echo "********************************************"
 echo "* Build Flags:"
+echo "*     MaCh3_Branch: ${MaCh3_Branch}"
 echo "*     USE_CPU: ${USE_CPU}"
 echo "*     USE_FPGA: ${USE_FPGA}"
 echo "*     FPGA_DEVICE: ${FPGA_DEVICE}"
@@ -59,8 +60,7 @@ echo "*     BUILD_DIR_NAME: ${BUILD_DIR_NAME}"
 echo "*     FULL_BUILD_PATH: ${FULL_BUILD_PATH}"
 echo "********************************************"
 
-# Don't want to trun this on and break CI build but nice for interactive builds to allow user to check config before starting
-# read -n1 -s -r -p "Press ANY key to continue with build...";echo
+read -n1 -s -r -p "Press ANY key to continue with build...";echo
 
 set -e # exit on first error
 
@@ -81,13 +81,14 @@ set -x
     -DCMAKE_CXX_COMPILER:FILEPATH=/opt/intel/oneapi/compiler/2025.0/bin/icpx \
     -DUSE_CPU:BOOL=${USE_CPU} \
     -DUSE_FPGA:BOOL=${USE_FPGA} \
+    -DMaCh3_Branch:STRING=${MaCh3_Branch} \
     -DFPGA_DEVICE=${FPGA_DEVICE} \
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
-    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=fast -fma -Xsrounding=faithful" \
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=fast -fma -Xsrounding=faithful" \
-    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=fast -fma -Xsrounding=faithful" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
     --no-warn-unused-cli \
     -S"." \
     -B"${BUILD_DIR_NAME}" \
