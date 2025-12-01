@@ -6,12 +6,13 @@ export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
 CORE_BUILD_DIR="${1:-./build}"
 TUTORIAL_BUILD_DIR="${2:-./build}"
 
+set -e # exit on first error
+set -x
+
 . /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
 . ${CORE_BUILD_DIR}/bin/setup.MaCh3.sh
 . ${TUTORIAL_BUILD_DIR}/bin/setup.MaCh3Tutorial.sh
 
-set -e # exit on first error
-set -x
 
 cd ${TUTORIAL_BUILD_DIR}
 
