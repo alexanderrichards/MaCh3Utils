@@ -28,11 +28,3 @@ ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
 # validate
 #./Apps/SplineValidations
 SplineValidations
-
-# Exited with exit code 1 for some reason, even when it passed?
-#    CPU Evaluate!
-#    ------------------
-#    [SplineValidations.cpp][info] Everything is correct
-#    Error: Process completed with exit code 1.
-
-# exit 0
