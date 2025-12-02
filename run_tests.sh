@@ -22,7 +22,8 @@ cd ${TUTORIAL_BUILD_DIR}
 
 # process it ?
 #./bin/ProcessMCMC ./bin/TutorialDiagConfig.yaml ./Test.root
-./bin/ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
+#./bin/ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
+ProcessMCMC bin/TutorialDiagConfig.yaml Test.root
 
 # validate
 #./Apps/SplineValidations
