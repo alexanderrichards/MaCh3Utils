@@ -1,16 +1,23 @@
 #!/bin/bash
 
+USE_CPU=FALSE
+USE_FPGA=FALSE
 FPGA_DEVICE=Agilex7
 COMPILE_EMULATOR=FALSE
 COMPILE_REPORT=FALSE
 COMPILE_HARDWARE=FALSE
-USE_CPU=FALSE
-USE_FPGA=TRUE
+MaCh3_Branch=intel_icpx
 
-export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
-export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
 
 case $1 in
+    emulator | report | hardware)
+        export QUARTUS_ROOTDIR_OVERRIDE=/opt/intelFPGA_pro/23.1.0/quartus/
+        export LM_LICENSE_FILE=5280@licsrv00.hep.ph.ic.ac.uk
+        USE_FPGA=TRUE
+        # YAML will not build unless we source the latter ?!
+        # source /opt/intel/oneapi/setvars.sh --force
+        . /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
+        ;;&
     emulator)
         COMPILE_EMULATOR=TRUE
         ;;
@@ -24,13 +31,16 @@ case $1 in
         ;;
     cpu)
         USE_CPU=TRUE
-        USE_FPGA=FALSE
         ;;
     *)
         echo "Missing/unknown parameter, choose from [cpu/emulator/report/hardware]"
         exit 1
         ;;
 esac
+
+# YAML will not build unless we source the latter ?!
+# source /opt/intel/oneapi/setvars.sh --force
+. /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
 
 # Argument 2: Target Source Directory (Default: $HOME/MaCh3)
 TARGET_DIR="${2:-$HOME/MaCh3}"
@@ -39,25 +49,38 @@ TARGET_DIR="${2:-$HOME/MaCh3}"
 BUILD_DIR_NAME="${3:-build}"
 FULL_BUILD_PATH="${TARGET_DIR}/${BUILD_DIR_NAME}"
 
-echo "Build Flags:"
-echo "  FPGA_DEVICE: ${FPGA_DEVICE}"
-echo "  COMPILE_EMULATOR: ${COMPILE_EMULATOR}"
-echo "  COMPILE_REPORT: ${COMPILE_REPORT}"
-echo "  COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
-echo "  TARGET_DIR: ${TARGET_DIR}"
-echo "  BUILD_DIR: ${FULL_BUILD_PATH}"
+
+echo "********************************************"
+echo "* Build Flags:"
+echo "*     MaCh3_Branch: ${MaCh3_Branch}"
+echo "*     USE_CPU: ${USE_CPU}"
+echo "*     USE_FPGA: ${USE_FPGA}"
+echo "*     FPGA_DEVICE: ${FPGA_DEVICE}"
+echo "*     COMPILE_EMULATOR: ${COMPILE_EMULATOR}"
+echo "*     COMPILE_REPORT: ${COMPILE_REPORT}"
+echo "*     COMPILE_HARDWARE: ${COMPILE_HARDWARE}"
+echo "*     TARGET_DIR: ${TARGET_DIR}"
+echo "*     BUILD_DIR_NAME: ${BUILD_DIR_NAME}"
+echo "*     FULL_BUILD_PATH: ${FULL_BUILD_PATH}"
+echo "********************************************"
+
+read -n1 -s -r -p "Press ANY key to continue with build...";echo
 
 set -e # exit on first error
 
 cd "${TARGET_DIR}"
-
 # Clean and recreate the specific build directory
+
 #rm -rf "${FULL_BUILD_PATH}"
 #mkdir -p "${FULL_BUILD_PATH}"
 
 # YAML will not build unless we source the latter ?!
 # source /opt/intel/oneapi/setvars.sh --force
 . /opt/intel/oneapi/2025.0/oneapi-vars.sh --force
+
+#rm -rf "${BUILD_DIR_NAME}"
+#mkdir -p "${BUILD_DIR_NAME}"
+
 
 set -x
 
@@ -71,20 +94,22 @@ set -x
     -DCMAKE_CXX_COMPILER:FILEPATH=/opt/intel/oneapi/compiler/2025.0/bin/icpx \
     -DUSE_CPU:BOOL=${USE_CPU} \
     -DUSE_FPGA:BOOL=${USE_FPGA} \
+    -DMaCh3_Branch:STRING=${MaCh3_Branch} \
     -DFPGA_DEVICE=${FPGA_DEVICE} \
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
+
     -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
     -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
     --no-warn-unused-cli \
-    -S"${TARGET_DIR}" \
-    -B"${FULL_BUILD_PATH}" \
+    -S"." \
+    -B"${BUILD_DIR_NAME}" \
     -G "Unix Makefiles"
 
 # Run from within the build dir as spdlog has some relative path somewhere!
-cd "${FULL_BUILD_PATH}"
+cd "${BUILD_DIR_NAME}"
 
 make VERBOSE=1 -j18
 make install
