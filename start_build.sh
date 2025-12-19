@@ -22,11 +22,11 @@ case $1 in
         COMPILE_EMULATOR=TRUE
         ;;
     report)
-        FPGA_DEVICE=/opt/oneapi-asp/ia840f/:ofs_ia840f_usm
+        FPGA_DEVICE=/home/hep/llaatu/oneapi-asp/ia840f/:ofs_ia840f_usm
         COMPILE_REPORT=TRUE
         ;;
     hardware)
-        FPGA_DEVICE=/opt/oneapi-asp/ia840f/:ofs_ia840f_usm
+        FPGA_DEVICE=/home/hep/llaatu/oneapi-asp/ia840f/:ofs_ia840f_usm
         COMPILE_HARDWARE=TRUE
         ;;
     cpu)
