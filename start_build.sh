@@ -100,9 +100,9 @@ set -x
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
 
-    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
-    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise --reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise -reuse-exe=~/gh-runner/_work/MaCh3/MaCh3/build_hw/splines/libSplines.so" \
     --no-warn-unused-cli \
     -S"." \
     -B"${BUILD_DIR_NAME}" \
