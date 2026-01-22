@@ -90,8 +90,8 @@ set -x
     -DCOMPILE_EMULATOR:BOOL=${COMPILE_EMULATOR} \
     -DCOMPILE_REPORT:BOOL=${COMPILE_REPORT} \
     -DCOMPILE_HARDWARE:BOOL=${COMPILE_HARDWARE} \
-    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O0 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
+    -DCMAKE_C_FLAGS_DEBUG:STRING="-w -g -O2 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful -xCORE-AVX2" \
+    -DCMAKE_CXX_FLAGS_DEBUG:STRING="-w -g -O2 -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful -xCORE-AVX2" \
     -DCMAKE_EXE_LINKER_FLAGS:STRING="-qopenmp -fno-eliminate-unused-debug-types -fp-model=precise -fma -Xsrounding=faithful" \
     --no-warn-unused-cli \
     -S"." \
